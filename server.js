@@ -1,18 +1,16 @@
 const express = require('express');
+const path = require('path');
+const router = express.Router();
 const app = express();
-// I think for local testing I have to use a dbconn string -- "process.env.DATABASE_URI" wont exist until I launch on Render(?)
-
+const url = 'mongodb+srv://admin:adminPassword123@weddingdb.ubg6zlf.mongodb.net/?appName=WeddingDB';
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const cors = require('cors');
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
+// Schema for guests who fill out the form
 const guestSchema = new Schema({
-    guestFirst: {
-        type: String,
-        required: true
-    },
-    guestLast: {
+    guestName: {
         type: String,
         required: true
     },
@@ -26,22 +24,28 @@ const guestSchema = new Schema({
     },
     additionalGuests: [
         {
-            first: String,
-            last: String
+            additionalGuestName: String
         }
-    ]
+    ],
+    dietaryRestriction: {
+        type: String,
+        required: false
+    }
 });
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/', express.static('/public'));
+app.use('/', require('./root'));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-mongoose.connect(process.env.DATABASE_URI)
+//mongoose.connect(process.env.DATABASE_URI)
+mongoose.connect(url)
   .then(() => console.log("Successfully connected to MongoDB"))
   .catch(err => {
     console.error("MongoDB connection error:", err);
