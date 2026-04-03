@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const router = express.Router();
 const app = express();
-const url = 'mongodb+srv://admin:adminPassword123@weddingdb.ubg6zlf.mongodb.net/?appName=WeddingDB';
+const url = process.env.DATABASE_URI;
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const cors = require('cors');
