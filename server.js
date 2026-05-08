@@ -9,8 +9,8 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const PORT = process.env.PORT || 5000;
 
-const emailUser = process.env.EMAIL_USER;
-const emailPass = process.env.EMAIL_PASS;
+const emailUser = process.env.NEXT_PUBLIC_EMAIL_USER;
+const emailPass = process.env.NEXT_PUBLIC_EMAIL_PASS;
 
 // Schema for guests who fill out the form
 const guestSchema = new Schema({
