@@ -39,6 +39,9 @@ const guestSchema = new Schema({
 
 const transporter = nodemailer.createTransport({
   host: '74.125.124.108',
+  tls: {
+    servername: 'smtp.gmail.com'
+  },
   port: 465,
   secure: true,
   auth: {
