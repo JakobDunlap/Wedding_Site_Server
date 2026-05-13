@@ -64,26 +64,40 @@ mongoose.connect(url)
     process.exit(1);
   });
 
+//LOG SECRET
+console.log(emailUser);
+
+//DEBUG ANY ERRORS
+transporter.verify((error, success) => {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log("SMTP server is ready");
+  }
+});
+
 app.post("/form", async (req, res) => {
   const formData = req.body;
   const emailAddressFromForm = formData.email;
   const Guest = mongoose.model("Guest", guestSchema);
   const newItem = new Guest(formData);
   try {
-    await newItem.save();
-    res.status(201).json({ message: "Data saved successfully" });
+    await newItem.save(); //MAYBE MOVE THIS LATER IN CODE, MAYBE PUT 'await' BEFORE 'transporter.sendEmail'
 
     // Send email
     console.log(`Attempting to send confirmation email to "${emailAddressFromForm}"`);
     transporter.sendMail({
+      from: 'MyWebsite',
       to: emailAddressFromForm,
       subject: 'ya got mail',
       html: '<h1>Hi how are you</h1><br><p>subtext</p>'
     }).then(() => {
       console.log('Email sent');
-    }).catch(err => {
+    }).catch(err => {  //MAYBE REMOVE THIS?
       console.error(err);
     });
+
+    res.status(201).json({ message: "Data saved successfully" });
 
   } catch (err) {
     console.error(err);
